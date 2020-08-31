@@ -1,0 +1,53 @@
+h1 {
+  color: black;
+}
+header {
+  background-image: url("KochiTicket.jpg");
+}
+
+.logoText {
+  font-family: "Sawarabi Gothic";
+  font-weight: lighter;
+  font-size: 30px;
+  color: white;
+  letter-spacing: 50px;
+}
+
+.headerInner {
+  width: 100%;
+  height: 720px;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mainInner {
+  max-width: 1000px;
+  margin: auto;
+  padding: 0 20px;
+  background: #ffffff;
+}
+
+footer {
+  background: #eeeeee;
+}
+
+.footerInner {
+  /* グレーのフッター */
+  text-align: center;
+  margin-top: 50px;
+  padding: 30px;
+}
+
+.NakamuraStaPic {
+  position: relative;
+  top: 20px;
+
+  text-align: center;
+}
+
+.nakanohito {
+  position: relative;
+  top: 20px;
+}

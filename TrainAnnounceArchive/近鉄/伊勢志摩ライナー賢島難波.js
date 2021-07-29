@@ -9,5 +9,6 @@ var stop_list_ja = ["賢島", "鵜方", "志摩磯部", "鳥羽", "五十鈴川"
 var stop_list_en = ["Kashikojima", "Ugata", "Shima-Isobe", "Toba", "Isuzugawa [内宮前]", "Uji-Yamada", "Iseshi", "Matsusaka", "Ise-Nakagawa", "Iga-Kanbe", "Nabari", "Haibara", "Yamato-Yagi", "Yamato-Takada", "Turuhashi", "Osaka-Uehonmachi", "Osaka-Namba"];
 var stop_stations;
 stop_stations = new StopStation(true, stop_list_ja, stop_list_en, undefined, undefined);
-var kashikojima = new WhileLoop(stop_stations, undefined);
-stop_stations.start();
+var kashikojima = new WhileMovLoop(stop_stations, undefined);
+kashikojima.start();
+new AnimationCenterText(true, "近鉄をご利用いただき ありがとうございます", "Thank you for taking Kintetsu railway");

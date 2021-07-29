@@ -1,19 +1,25 @@
 "use strict";
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -44,6 +50,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+function all_del() {
+    var canvas = document.getElementById('LCD_CanvasMap');
+    var ctx = canvas.getContext('2d');
+    ctx.fillStyle = "#ffffff";
+    ctx.clearRect(0, 0, 1280, 720);
+    ctx.fillStyle = "#000000";
+}
 var AnimationRoot = /** @class */ (function () {
     function AnimationRoot() {
     }
@@ -52,11 +65,19 @@ var AnimationRoot = /** @class */ (function () {
 var WhileLoop = /** @class */ (function () {
     function WhileLoop(send_class, send_section_time) {
         if (send_section_time === void 0) { send_section_time = 100; }
+        this.class_data = send_class;
+        this.section_time = send_section_time;
+    }
+    return WhileLoop;
+}());
+var WhileMovLoop = /** @class */ (function () {
+    function WhileMovLoop(send_class, send_section_time) {
+        if (send_section_time === void 0) { send_section_time = 100; }
         this.flag = true;
         this.class_data = send_class;
         this.section_time = send_section_time;
     }
-    WhileLoop.prototype.sleep = function (sleep_time) {
+    WhileMovLoop.prototype.sleep = function (sleep_time) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, new Promise(function (resolve) {
@@ -65,26 +86,49 @@ var WhileLoop = /** @class */ (function () {
             });
         });
     };
-    WhileLoop.prototype.loop = function () {
+    WhileMovLoop.prototype.loop = function () {
         return __awaiter(this, void 0, void 0, function () {
             var point;
             return __generator(this, function (_a) {
-                point = 0;
-                while (this.flag) {
-                    this.class_data.loop(point);
-                    point += 10;
-                    //await this.sleep(10);
+                switch (_a.label) {
+                    case 0:
+                        point = 0;
+                        _a.label = 1;
+                    case 1:
+                        if (!this.flag) return [3 /*break*/, 3];
+                        point -= 20;
+                        return [4 /*yield*/, this.sleep(200)];
+                    case 2:
+                        _a.sent();
+                        all_del();
+                        this.class_data.main(point);
+                        console.log(point);
+                        if (-2420 > point) {
+                            return [3 /*break*/, 3];
+                        }
+                        return [3 /*break*/, 1];
+                    case 3: return [2 /*return*/, 1];
                 }
-                return [2 /*return*/, 1];
             });
         });
     };
-    WhileLoop.prototype.start = function () {
+    WhileMovLoop.prototype.start = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.loop()];
+                    case 1:
+                        _a.sent();
+                        console.log("にゃーん");
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
-    WhileLoop.prototype.end = function () {
+    WhileMovLoop.prototype.end = function () {
         this.flag = false;
     };
-    return WhileLoop;
+    return WhileMovLoop;
 }());
 var StopStation = /** @class */ (function (_super) {
     __extends(StopStation, _super);
@@ -106,11 +150,8 @@ var StopStation = /** @class */ (function (_super) {
         _this.stop_list_color = send_stop_list_color;
         return _this;
     }
-    StopStation.prototype.loop = function (y_plus) {
+    StopStation.prototype.main = function (y_plus) {
         if (y_plus === void 0) { y_plus = 0; }
-        if (this.delbool) {
-            new AllDel();
-        }
         var canvas = document.getElementById('LCD_CanvasMap');
         this.ctx = canvas.getContext('2d');
         this.ctx.fillStyle = "#000000";
@@ -121,7 +162,7 @@ var StopStation = /** @class */ (function (_super) {
         var x_circle = 40;
         var x_base = 100;
         var x_text = 100;
-        var y_base = 100 + y_plus;
+        var y_base = 720 + y_plus;
         var y_one = 100;
         var circle_radius = 40;
         for (var i = 0; i < len_ja; i++) {
@@ -167,54 +208,65 @@ var TrainSecond = /** @class */ (function (_super) {
         if (y === void 0) { y = 360; }
         if (TYPE === void 0) { TYPE = "A"; }
         if (type_color === void 0) { type_color = "#000000"; }
-        var _this = this;
-        var d_color = "#000000";
-        _this = _super.call(this) || this;
-        if (delbool) {
-            new AllDel();
-        }
-        var canvas = document.getElementById('LCD_CanvasMap');
-        _this.ctx = canvas.getContext('2d');
-        _this.ctx.fillStyle = "#000000";
-        _this.ctx.font = "45px Yu Gothic";
-        _this.ctx.textAlign = "center";
-        var A_language1_textWidth = _this.ctx.measureText(A_language1).width;
-        var B_language1_textWidth = _this.ctx.measureText(B_language1).width;
-        var A_language1_X = x - (A_language1_textWidth / 2) - 20;
-        var B_language1_X = x + (B_language1_textWidth / 2) + 20;
-        if (TYPE === "A") {
-            _this.ctx.fillStyle = type_color;
-        }
-        else {
-            _this.ctx.fillStyle = d_color;
-        }
-        _this.ctx.fillText(A_language1, A_language1_X, y);
-        if (TYPE === "B") {
-            _this.ctx.fillStyle = type_color;
-        }
-        else {
-            _this.ctx.fillStyle = d_color;
-        }
-        _this.ctx.fillText(B_language1, B_language1_X, y);
-        _this.ctx.font = "25px Yu Gothic";
-        var A_language2_textWidth = _this.ctx.measureText(A_language2).width;
-        var B_language2_textWidth = _this.ctx.measureText(B_language2).width;
-        if (TYPE === "A") {
-            _this.ctx.fillStyle = type_color;
-        }
-        else {
-            _this.ctx.fillStyle = d_color;
-        }
-        _this.ctx.fillText(A_language2, A_language1_X, y + 30);
-        if (TYPE === "B") {
-            _this.ctx.fillStyle = type_color;
-        }
-        else {
-            _this.ctx.fillStyle = d_color;
-        }
-        _this.ctx.fillText(B_language2, B_language1_X, y + 30);
+        var _this = _super.call(this) || this;
+        _this.delbool = true;
+        _this.delbool = delbool;
+        _this.A_language1 = A_language1;
+        _this.B_language1 = B_language1;
+        _this.A_language2 = A_language2;
+        _this.B_language2 = B_language2;
+        _this.x = x;
+        _this.y = y;
+        _this.TYPE = TYPE;
+        _this.type_color = type_color;
         return _this;
     }
+    TrainSecond.prototype.main = function () {
+        var d_color = "#000000";
+        if (this.delbool) {
+            all_del();
+        }
+        var canvas = document.getElementById('LCD_CanvasMap');
+        this.ctx = canvas.getContext('2d');
+        this.ctx.fillStyle = "#000000";
+        this.ctx.font = "45px Yu Gothic";
+        this.ctx.textAlign = "center";
+        var A_language1_textWidth = this.ctx.measureText(this.A_language1).width;
+        var B_language1_textWidth = this.ctx.measureText(this.B_language1).width;
+        var A_language1_X = this.x - (A_language1_textWidth / 2) - 20;
+        var B_language1_X = this.x + (B_language1_textWidth / 2) + 20;
+        if (this.TYPE === "A") {
+            this.ctx.fillStyle = this.type_color;
+        }
+        else {
+            this.ctx.fillStyle = d_color;
+        }
+        this.ctx.fillText(this.A_language1, A_language1_X, this.y);
+        if (this.TYPE === "B") {
+            this.ctx.fillStyle = this.type_color;
+        }
+        else {
+            this.ctx.fillStyle = d_color;
+        }
+        this.ctx.fillText(this.B_language1, B_language1_X, this.y);
+        this.ctx.font = "25px Yu Gothic";
+        var A_language2_textWidth = this.ctx.measureText(this.A_language2).width;
+        var B_language2_textWidth = this.ctx.measureText(this.B_language2).width;
+        if (this.TYPE === "A") {
+            this.ctx.fillStyle = this.type_color;
+        }
+        else {
+            this.ctx.fillStyle = d_color;
+        }
+        this.ctx.fillText(this.A_language2, A_language1_X, this.y + 30);
+        if (this.TYPE === "B") {
+            this.ctx.fillStyle = this.type_color;
+        }
+        else {
+            this.ctx.fillStyle = d_color;
+        }
+        this.ctx.fillText(this.B_language2, B_language1_X, this.y + 30);
+    };
     return TrainSecond;
 }(AnimationRoot));
 var AnimationCenterText = /** @class */ (function (_super) {
@@ -223,29 +275,27 @@ var AnimationCenterText = /** @class */ (function (_super) {
         if (x === void 0) { x = 640; }
         if (y === void 0) { y = 360; }
         var _this = _super.call(this) || this;
-        if (delbool) {
-            new AllDel();
-        }
-        var canvas = document.getElementById('LCD_CanvasMap');
-        _this.ctx = canvas.getContext('2d');
-        _this.ctx.fillStyle = "#000000";
-        _this.ctx.textAlign = "center";
-        _this.ctx.font = "45px Yu Gothic";
-        _this.ctx.fillText(text_language1, x, y);
-        if (text_language2 !== "") {
-            _this.ctx.font = "25px Yu Gothic";
-            _this.ctx.fillText(text_language2, x, y + 30);
-        }
+        _this.delbool = delbool;
+        _this.text_language1 = text_language1;
+        _this.text_language2 = text_language2;
+        _this.x = x;
+        _this.y = y;
         return _this;
     }
+    AnimationCenterText.prototype.main = function () {
+        if (this.delbool) {
+            all_del();
+        }
+        var canvas = document.getElementById('LCD_CanvasMap');
+        this.ctx = canvas.getContext('2d');
+        this.ctx.fillStyle = "#000000";
+        this.ctx.textAlign = "center";
+        this.ctx.font = "45px Yu Gothic";
+        this.ctx.fillText(this.text_language1, this.x, this.y);
+        if (this.text_language2 !== "") {
+            this.ctx.font = "25px Yu Gothic";
+            this.ctx.fillText(this.text_language2, this.x, this.y + 30);
+        }
+    };
     return AnimationCenterText;
 }(AnimationRoot));
-var AllDel = /** @class */ (function () {
-    function AllDel() {
-        var canvas = document.getElementById('LCD_CanvasMap');
-        var ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, 1280, 720);
-        ctx.fillStyle = "#000000";
-    }
-    return AllDel;
-}());

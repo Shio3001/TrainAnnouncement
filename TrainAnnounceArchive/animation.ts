@@ -1,8 +1,24 @@
+function all_del(){
+    var canvas = <HTMLCanvasElement>document.getElementById('LCD_CanvasMap')!;
+    var ctx = canvas.getContext('2d')!;
+    ctx.fillStyle = "#ffffff" ;
+    ctx.clearRect(0,0,1280,720);
+    ctx.fillStyle = "#000000" ;
+}
+
 class AnimationRoot {
     constructor(){}
 }
-
 class WhileLoop{
+    private class_data:any;
+    private section_time:number;
+    constructor(send_class:any,send_section_time:number= 100){
+        this.class_data = send_class;
+        this.section_time = send_section_time;
+    }
+
+}
+class WhileMovLoop{
     private class_data:any;
     private section_time:number;
     private flag:boolean = true;
@@ -18,18 +34,27 @@ class WhileLoop{
           })
     }
 
-    private async loop() {
+    private loop() {
         var point = 0;
+
         while (this.flag){
-            this.class_data.loop(point)
-            point += 10;
-            //await this.sleep(10);
+            point -= 20;
+            await this.sleep(200);
+            all_del();
+            this.class_data.main(point)
+            console.log(point)
+
+            if (-2420 > point) {
+                break
+            }
         }
         return 1;
     }
 
-    public start(){
-
+    public async start(){
+        
+        this.loop()
+        console.log("にゃーん")
     }
 
     public end(){
@@ -55,11 +80,7 @@ class StopStation extends AnimationRoot {
         this.stop_list_color = send_stop_list_color
     }
     
-    public loop(y_plus:number=0){
-        
-        if (this.delbool){
-            new AllDel();
-        }
+    public main(y_plus:number=0){
         
         var canvas = <HTMLCanvasElement>document.getElementById('LCD_CanvasMap')!;
 
@@ -75,7 +96,7 @@ class StopStation extends AnimationRoot {
         var x_base = 100;
         var x_text = 100;
 
-        var y_base = 100 + y_plus;
+        var y_base = 720 + y_plus;
         var y_one = 100;
 
         var circle_radius = 40;
@@ -130,11 +151,34 @@ class StopStation extends AnimationRoot {
 class TrainSecond extends AnimationRoot {
     private ctx:any;
 
+    private delbool:boolean = true;
+    private A_language1:string;
+    private B_language1:string;
+    private A_language2:string;
+    private B_language2:string;
+    private x:number;
+    private y:number;
+    private TYPE:string;
+    private type_color:string;
+
     constructor(delbool:boolean,A_language1:string,B_language1:string,A_language2:string,B_language2:string,x:number=640,y:number=360,TYPE:string="A",type_color:string="#000000") {
-        var d_color:string="#000000"
         super();
-        if (delbool){
-            new AllDel();
+        this.delbool = delbool;
+        this.A_language1 = A_language1;
+        this.B_language1 = B_language1;
+        this.A_language2 = A_language2;
+        this.B_language2 = B_language2;
+        this.x =x;
+        this.y =y;
+        this.TYPE = TYPE;
+        this.type_color = type_color;
+    }
+
+    main(){
+        var d_color:string="#000000"
+        
+        if (this.delbool){
+            all_del();
         }
         
         var canvas = <HTMLCanvasElement>document.getElementById('LCD_CanvasMap')!;
@@ -145,57 +189,72 @@ class TrainSecond extends AnimationRoot {
         this.ctx.font = "45px Yu Gothic"
 
         this.ctx.textAlign = "center";
-        var A_language1_textWidth = this.ctx.measureText(A_language1 ).width ;
-        var B_language1_textWidth = this.ctx.measureText( B_language1 ).width ;
+        var A_language1_textWidth = this.ctx.measureText(this.A_language1 ).width ;
+        var B_language1_textWidth = this.ctx.measureText( this.B_language1 ).width ;
 
-        var A_language1_X =  x - (A_language1_textWidth / 2) - 20;
-        var B_language1_X =   x + (B_language1_textWidth / 2) + 20;
+        var A_language1_X =  this.x - (A_language1_textWidth / 2) - 20;
+        var B_language1_X =   this.x + (B_language1_textWidth / 2) + 20;
 
-        if (TYPE === "A"){
-            this.ctx.fillStyle = type_color
+        if (this.TYPE === "A"){
+            this.ctx.fillStyle = this.type_color
         }
         else{
             this.ctx.fillStyle = d_color
         }
 
-        this.ctx.fillText(A_language1,A_language1_X ,y)     
+        this.ctx.fillText(this.A_language1,A_language1_X ,this.y)     
 
-        if (TYPE === "B"){
-            this.ctx.fillStyle = type_color
+        if (this.TYPE === "B"){
+            this.ctx.fillStyle = this.type_color
         }
         else{
             this.ctx.fillStyle = d_color
         }
-        this.ctx.fillText(B_language1, B_language1_X ,y)    
+        this.ctx.fillText(this.B_language1, B_language1_X ,this.y)    
 
         this.ctx.font = "25px Yu Gothic"
-        var A_language2_textWidth = this.ctx.measureText(A_language2 ).width ;
-        var B_language2_textWidth = this.ctx.measureText( B_language2 ).width ;
+        var A_language2_textWidth = this.ctx.measureText(this.A_language2 ).width ;
+        var B_language2_textWidth = this.ctx.measureText( this.B_language2 ).width ;
 
-        if (TYPE === "A"){
-            this.ctx.fillStyle = type_color
+        if (this.TYPE === "A"){
+            this.ctx.fillStyle = this.type_color
         }
         else{
             this.ctx.fillStyle = d_color
         }
-        this.ctx.fillText(A_language2, A_language1_X ,y+30)   
-        if (TYPE === "B"){
-            this.ctx.fillStyle = type_color
+        this.ctx.fillText(this.A_language2, A_language1_X ,this.y+30)   
+        if (this.TYPE === "B"){
+            this.ctx.fillStyle = this.type_color
         }
         else{
             this.ctx.fillStyle = d_color
         }
-        this.ctx.fillText(B_language2,B_language1_X  ,y+30)  
+        this.ctx.fillText(this.B_language2,B_language1_X  ,this.y+30)  
     }
 }
 
 class AnimationCenterText extends AnimationRoot {
     private ctx:any;
+    private delbool;
+    private text_language1;
+    private text_language2;
+    private x;
+    private y;
+
 
     constructor(delbool:boolean,text_language1:string,text_language2:string,x:number=640,y:number=360) {
         super();
-        if (delbool){
-            new AllDel();
+        this.delbool =  delbool;
+        this.text_language1 =  text_language1;
+        this.text_language2 = text_language2;
+        this.x= x;
+        this. y= y;
+    }
+
+    main(){
+        
+        if (this.delbool){
+            all_del();
         }
         
         var canvas = <HTMLCanvasElement>document.getElementById('LCD_CanvasMap')!;
@@ -205,22 +264,13 @@ class AnimationCenterText extends AnimationRoot {
         this.ctx.textAlign = "center";
 
         this.ctx.font = "45px Yu Gothic"
-        this.ctx.fillText(text_language1, x ,y)     
+        this.ctx.fillText(this.text_language1, this.x ,this.y)     
 
-        if (text_language2 !== ""){
+        if (this.text_language2 !== ""){
             this.ctx.font = "25px Yu Gothic"
 
-            this.ctx.fillText(text_language2, x ,y+30)   
+            this.ctx.fillText(this.text_language2, this.x ,this.y+30)   
         }
   
-    }
-}
-
-class AllDel{
-    constructor(){
-        var canvas = <HTMLCanvasElement>document.getElementById('LCD_CanvasMap')!;
-        var ctx = canvas.getContext('2d')!;
-        ctx.clearRect(0,0,1280,720);
-        ctx.fillStyle = "#000000" ;
     }
 }

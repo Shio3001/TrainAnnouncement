@@ -1,0 +1,25 @@
+.text_languageElement_sta {
+  animation-name: animation-text_languageElement_sta;
+  animation-duration: 2s;
+  left: var(--left_pos_B);
+  top: var(--top_pos_B);
+}
+@keyframes animation-text_languageElement_sta {
+  0% {
+    left: var(--left_pos_A);
+    top: var(--top_pos_A);
+    opacity: 0;
+  }
+
+  50% {
+    left: var(--left_pos_B);
+    top: var(--top_pos_A);
+    opacity: 1;
+  }
+
+  100% {
+    left: var(--left_pos_B);
+    top: var(--top_pos_B);
+    opacity: 1;
+  }
+}

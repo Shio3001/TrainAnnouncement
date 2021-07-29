@@ -1,10 +1,8 @@
-function all_del(){
-    var canvas = <HTMLCanvasElement>document.getElementById('LCD_CanvasMap')!;
-    var ctx = canvas.getContext('2d')!;
-    ctx.fillStyle = "#ffffff" ;
-    ctx.clearRect(0,0,1280,720);
-    ctx.fillStyle = "#000000" ;
-}
+const width_size = document.documentElement.clientWidth
+const hight_size = document.documentElement.clientHeight	
+
+var Main_LCD_body = document.getElementById("LCD")!;
+Main_LCD_body.style.position = "relative";
 
 class AnimationRoot {
     constructor(){}
@@ -28,38 +26,10 @@ class WhileMovLoop{
         this.section_time = send_section_time;
     }
 
-    private async sleep(sleep_time:number){
-        return new Promise(function(resolve) {
-            setTimeout(function() { resolve(0) }, sleep_time)
-          })
+    start(){
+
     }
 
-    private loop() {
-        var point = 0;
-
-        while (this.flag){
-            point -= 20;
-            await this.sleep(200);
-            all_del();
-            this.class_data.main(point)
-            console.log(point)
-
-            if (-2420 > point) {
-                break
-            }
-        }
-        return 1;
-    }
-
-    public async start(){
-        
-        this.loop()
-        console.log("にゃーん")
-    }
-
-    public end(){
-        this.flag = false
-    }
 }
 
 class StopStation extends AnimationRoot {
@@ -82,69 +52,6 @@ class StopStation extends AnimationRoot {
     
     public main(y_plus:number=0){
         
-        var canvas = <HTMLCanvasElement>document.getElementById('LCD_CanvasMap')!;
-
-        this.ctx = canvas.getContext('2d')!;
-        this.ctx.fillStyle = "#000000" ;
-
-        const len_ja = stop_list_ja.length
-        const len_en = stop_list_en.length
-        const len_num = this.stop_list_num.length
-        const len_color = this.stop_list_color.length
-
-        var x_circle = 40;
-        var x_base = 100;
-        var x_text = 100;
-
-        var y_base = 720 + y_plus;
-        var y_one = 100;
-
-        var circle_radius = 40;
-
-        for (let i = 0; i < len_ja; i++) {
-
-            const ja = stop_list_ja[i]
-
-            this.ctx.arc( x_base, y_base, x_circle, 0 * Math.PI / 180, 360 * Math.PI / 180, false ) ;
-
-            this.ctx.fillStyle = "#000000" ;
-            this.ctx.textAlign = "left";
-            this.ctx.font = "45px Yu Gothic"
-            const ja_x = x_base + (x_circle / 2) + 30
-            this.ctx.fillText(ja, ja_x ,y_base+5)    
-
-
-            if (i < len_color){
-                const color = stop_list_en[i]
-                this.ctx.fillStyle = color ;
-            }
-            else{
-                this.ctx.fillStyle = "#000000" ;
-            }
-
-            this.ctx.fill() ;
-
-            if (i < len_en){
-                const en = stop_list_en[i]
-                this.ctx.fillStyle = "#000000" ;
-                this.ctx.textAlign = "left";
-                this.ctx.font = "25px Yu Gothic"
-                const en_x = x_base + (x_circle / 2) + 35
-                this.ctx.fillText(en, en_x ,y_base+35)    
-
-            }
-
-            if (i < len_num){
-                const num = stop_list_en[i]
-                this.ctx.font = "25px Yu Gothic"
-                this.ctx.textAlign = "center";
-                this.ctx.fillStyle = "#ffffff" ;
-                this.ctx.fillText(num,x_base ,y_base)     
-            }
-
-
-            y_base += y_one
-        }
     }
 }
 
@@ -175,61 +82,6 @@ class TrainSecond extends AnimationRoot {
     }
 
     main(){
-        var d_color:string="#000000"
-        
-        if (this.delbool){
-            all_del();
-        }
-        
-        var canvas = <HTMLCanvasElement>document.getElementById('LCD_CanvasMap')!;
-
-        this.ctx = canvas.getContext('2d')!;
-        this.ctx.fillStyle = "#000000" ;
-
-        this.ctx.font = "45px Yu Gothic"
-
-        this.ctx.textAlign = "center";
-        var A_language1_textWidth = this.ctx.measureText(this.A_language1 ).width ;
-        var B_language1_textWidth = this.ctx.measureText( this.B_language1 ).width ;
-
-        var A_language1_X =  this.x - (A_language1_textWidth / 2) - 20;
-        var B_language1_X =   this.x + (B_language1_textWidth / 2) + 20;
-
-        if (this.TYPE === "A"){
-            this.ctx.fillStyle = this.type_color
-        }
-        else{
-            this.ctx.fillStyle = d_color
-        }
-
-        this.ctx.fillText(this.A_language1,A_language1_X ,this.y)     
-
-        if (this.TYPE === "B"){
-            this.ctx.fillStyle = this.type_color
-        }
-        else{
-            this.ctx.fillStyle = d_color
-        }
-        this.ctx.fillText(this.B_language1, B_language1_X ,this.y)    
-
-        this.ctx.font = "25px Yu Gothic"
-        var A_language2_textWidth = this.ctx.measureText(this.A_language2 ).width ;
-        var B_language2_textWidth = this.ctx.measureText( this.B_language2 ).width ;
-
-        if (this.TYPE === "A"){
-            this.ctx.fillStyle = this.type_color
-        }
-        else{
-            this.ctx.fillStyle = d_color
-        }
-        this.ctx.fillText(this.A_language2, A_language1_X ,this.y+30)   
-        if (this.TYPE === "B"){
-            this.ctx.fillStyle = this.type_color
-        }
-        else{
-            this.ctx.fillStyle = d_color
-        }
-        this.ctx.fillText(this.B_language2,B_language1_X  ,this.y+30)  
     }
 }
 
@@ -252,25 +104,83 @@ class AnimationCenterText extends AnimationRoot {
     }
 
     main(){
+        var text_language1Element = document.createElement("p"); // p要素作成
+        var text_language1Content = document.createTextNode(this.text_language1); // テキストノードを作成
+        text_language1Element.appendChild(text_language1Content); // p要素にテキストノードを追加
+        text_language1Element.setAttribute("id","text_language1"+this.text_language1); // p要素にidを設定
         
-        if (this.delbool){
-            all_del();
-        }
+        var text_language2Element = document.createElement("p"); // p要素作成
+        var text_language2Content = document.createTextNode(this.text_language2); // テキストノードを作成
+        text_language2Element.appendChild(text_language2Content); // p要素にテキストノードを追加
+        text_language2Element.setAttribute("id","text_language2"+this.text_language2); // p要素にidを設定
+
+
+        text_language1Element.style.fontSize = "50px" ;
+        text_language2Element.style.fontSize = "30px" ;
+        text_language1Element.style.fontFamily  = "Yu Gothic" ;
+        text_language2Element.style.fontFamily  = "Yu Gothic" ;
+
+        //text_language1Element.style.textAlign = "center";
+        //text_language2Element.style.textAlign = "center";
+
+        text_language1Element.style.position = "fixed";
+        text_language2Element.style.position = "fixed";
         
-        var canvas = <HTMLCanvasElement>document.getElementById('LCD_CanvasMap')!;
+        
+        var LCD_body = document.getElementById("LCD")!;
+        LCD_body.appendChild(text_language1Element);
+        LCD_body.appendChild(text_language2Element);
 
-        this.ctx = canvas.getContext('2d')!;
-        this.ctx.fillStyle = "#000000" ;
-        this.ctx.textAlign = "center";
+        const text_1px_x = ((width_size / 2) - (text_language1Element.clientWidth / 2))
+        const text_2px_x = ((width_size / 2) - (text_language2Element.clientWidth / 2))
 
-        this.ctx.font = "45px Yu Gothic"
-        this.ctx.fillText(this.text_language1, this.x ,this.y)     
+        //text_language1Element.style.left =  text_1px_x + "px";
+        //text_language2Element.style.left =  text_2px_x + "px";
 
-        if (this.text_language2 !== ""){
-            this.ctx.font = "25px Yu Gothic"
+        console.log(text_1px_x)
+        console.log(text_2px_x)
 
-            this.ctx.fillText(this.text_language2, this.x ,this.y+30)   
-        }
-  
+        const text_1px_y = ((hight_size / 2) - (text_language1Element.clientHeight / 2)) -70
+        const text_2px_y = ((hight_size / 2) - (text_language2Element.clientHeight / 2))
+
+        //text_language1Element.style.top =  text_1px_y + "px";
+        //text_language2Element.style.top =  text_2px_y + "px";
+
+        console.log(text_1px_y)
+        console.log(text_2px_y)
+
+        //text_language1Element.className = "text_language1Element_sta";
+        //text_language1Element.className = "text_language1Element_end";
+        //text_language1Element.classList.add("text_language1Element_sta")
+        text_language1Element.style.setProperty('--left_pos_A', text_1px_x-200+`px`);
+        text_language1Element.style.setProperty('--left_pos_B', text_1px_x+`px`);
+        
+        text_language1Element.style.setProperty('--top_pos_A', text_1px_y+`px`);
+        text_language1Element.style.setProperty('--top_pos_B', text_1px_y-(hight_size*0.3)+`px`);
+
+        //text_language1Element.style.setProperty('--time', "2s");
+        text_language1Element.classList.add("text_languageElement_sta")
+
+        //(´・ω・`)
+
+        text_language2Element.style.setProperty('--left_pos_A', text_2px_x-100+`px`);
+        text_language2Element.style.setProperty('--left_pos_B', text_2px_x+`px`);
+        
+        text_language2Element.style.setProperty('--top_pos_A', text_2px_y+`px`);
+        text_language2Element.style.setProperty('--top_pos_B', text_2px_y-(hight_size*0.3)+`px`);
+        //text_language2Element.style.setProperty('--time', "3s");
+        text_language2Element.classList.add("text_languageElement_sta")
+
+        
+
+    }
+
+    del(){
+        var text_language1 = document.getElementById("text_language1"+this.text_language1)!;
+        text_language1.remove()
+        var text_language2 = document.getElementById("text_language2"+this.text_language2)!;
+        text_language2.remove()
     }
 }
+
+//https://qiita.com/takahiro_itazuri/items/559427278f315ed119fe

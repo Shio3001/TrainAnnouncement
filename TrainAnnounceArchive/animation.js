@@ -16,6 +16,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var width_size = document.documentElement.clientWidth;
 var hight_size = document.documentElement.clientHeight;
+var percent_width_size = 100 / width_size;
+var percent_hight_size = 100 / hight_size;
 var Main_LCD_body = document.getElementById("LCD");
 Main_LCD_body.style.position = "relative";
 var AnimationRoot = /** @class */ (function () {
@@ -113,8 +115,8 @@ var AnimationCenterText = /** @class */ (function (_super) {
         var text_language2Content = document.createTextNode(this.text_language2); // テキストノードを作成
         text_language2Element.appendChild(text_language2Content); // p要素にテキストノードを追加
         text_language2Element.setAttribute("id", "text_language2" + this.text_language2); // p要素にidを設定
-        text_language1Element.style.fontSize = "50px";
-        text_language2Element.style.fontSize = "30px";
+        text_language1Element.style.fontSize = hight_size / 18 + "px";
+        text_language2Element.style.fontSize = hight_size / 35 + "px";
         text_language1Element.style.fontFamily = "Yu Gothic";
         text_language2Element.style.fontFamily = "Yu Gothic";
         //text_language1Element.style.textAlign = "center";
@@ -124,14 +126,14 @@ var AnimationCenterText = /** @class */ (function (_super) {
         var LCD_body = document.getElementById("LCD");
         LCD_body.appendChild(text_language1Element);
         LCD_body.appendChild(text_language2Element);
-        var text_1px_x = ((width_size / 2) - (text_language1Element.clientWidth / 2));
-        var text_2px_x = ((width_size / 2) - (text_language2Element.clientWidth / 2));
+        var text_1px_x = ((width_size / 2) - (text_language1Element.clientWidth / 2)) * percent_width_size;
+        var text_2px_x = ((width_size / 2) - (text_language2Element.clientWidth / 2)) * percent_width_size;
         //text_language1Element.style.left =  text_1px_x + "px";
         //text_language2Element.style.left =  text_2px_x + "px";
         console.log(text_1px_x);
         console.log(text_2px_x);
-        var text_1px_y = ((hight_size / 2) - (text_language1Element.clientHeight / 2)) - 70;
-        var text_2px_y = ((hight_size / 2) - (text_language2Element.clientHeight / 2));
+        var text_1px_y = (((hight_size / 2) - (text_language1Element.clientHeight / 2)) - 70) * percent_hight_size;
+        var text_2px_y = (((hight_size / 2) - (text_language2Element.clientHeight / 2))) * percent_hight_size;
         //text_language1Element.style.top =  text_1px_y + "px";
         //text_language2Element.style.top =  text_2px_y + "px";
         console.log(text_1px_y);
@@ -139,19 +141,21 @@ var AnimationCenterText = /** @class */ (function (_super) {
         //text_language1Element.className = "text_language1Element_sta";
         //text_language1Element.className = "text_language1Element_end";
         //text_language1Element.classList.add("text_language1Element_sta")
-        text_language1Element.style.setProperty('--left_pos_A', text_1px_x - 200 + "px");
-        text_language1Element.style.setProperty('--left_pos_B', text_1px_x + "px");
-        text_language1Element.style.setProperty('--top_pos_A', text_1px_y + "px");
-        text_language1Element.style.setProperty('--top_pos_B', text_1px_y - (hight_size * 0.3) + "px");
-        text_language1Element.style.setProperty('--time', "2s");
-        text_language1Element.classList.add("text_languageElement_sta");
+        text_language1Element.style.setProperty('--left_pos_A', text_1px_x - 20 + "%");
+        text_language1Element.style.setProperty('--left_pos_B', text_1px_x + "%");
+        text_language1Element.style.setProperty('--top_pos_A', text_1px_y + "%");
+        text_language1Element.style.setProperty('--top_pos_B', text_1px_y - (hight_size * 0.35 * percent_hight_size) + "%");
+        //text_language1Element.style.setProperty('--time', "2s");
+        text_language1Element.classList.add("text_languageElement_sta_up");
+        //text_language1Element.classList.add("text_languageElement_up")
         //(´・ω・`)
-        text_language2Element.style.setProperty('--left_pos_A', text_2px_x - 100 + "px");
-        text_language2Element.style.setProperty('--left_pos_B', text_2px_x + "px");
-        text_language2Element.style.setProperty('--top_pos_A', text_2px_y + "px");
-        text_language2Element.style.setProperty('--top_pos_B', text_2px_y - (hight_size * 0.3) + "px");
-        text_language2Element.style.setProperty('--time', "3s");
-        text_language2Element.classList.add("text_languageElement_sta");
+        text_language2Element.style.setProperty('--left_pos_A', text_2px_x - 10 + "%");
+        text_language2Element.style.setProperty('--left_pos_B', text_2px_x + "%");
+        text_language2Element.style.setProperty('--top_pos_A', text_2px_y + "%");
+        text_language2Element.style.setProperty('--top_pos_B', text_2px_y - (hight_size * 0.35 * percent_hight_size) + "%");
+        //text_language2Element.style.setProperty('--time', "3s");
+        text_language2Element.classList.add("text_languageElement_sta_up");
+        //text_language2Element.classList.add("text_languageElement_up")
     };
     AnimationCenterText.prototype.del = function () {
         var text_language1 = document.getElementById("text_language1" + this.text_language1);

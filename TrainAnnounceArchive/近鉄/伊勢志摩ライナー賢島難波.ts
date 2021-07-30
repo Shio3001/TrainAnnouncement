@@ -6,7 +6,7 @@ kashikojima1.main()
 
 
 //kashikojima1.del()
-const kashikojima2 = new TrainSecond(true,"次の停車駅は","伊勢志摩ライナー","Osaka-Namba","Ise-Shima Liner",undefined,undefined,"B","#aa5500")
+const kashikojima2 = new TrainSecond(true,"大阪難波","伊勢志摩ライナー","Osaka-Namba","Ise-Shima Liner",undefined,undefined,"B","#aa5500")
 kashikojima2.main()
 
 const stop_list_ja = ["賢島","鵜方","志摩磯部","鳥羽","五十鈴川","宇治山田","伊勢市","松阪","伊勢中川","伊賀神戸","名張","榛原","大和八木","大和高田","鶴橋","大阪上本町","大阪難波"]

@@ -1,6 +1,10 @@
 const width_size = document.documentElement.clientWidth
 const hight_size = document.documentElement.clientHeight	
 
+const percent_width_size = 100 / width_size;
+const percent_hight_size = 100 / hight_size;
+
+
 var Main_LCD_body = document.getElementById("LCD")!;
 Main_LCD_body.style.position = "relative";
 
@@ -115,8 +119,8 @@ class AnimationCenterText extends AnimationRoot {
         text_language2Element.setAttribute("id","text_language2"+this.text_language2); // p要素にidを設定
 
 
-        text_language1Element.style.fontSize = "50px" ;
-        text_language2Element.style.fontSize = "30px" ;
+        text_language1Element.style.fontSize = hight_size/18+"px" ;
+        text_language2Element.style.fontSize = hight_size/35+"px" ;
         text_language1Element.style.fontFamily  = "Yu Gothic" ;
         text_language2Element.style.fontFamily  = "Yu Gothic" ;
 
@@ -131,8 +135,8 @@ class AnimationCenterText extends AnimationRoot {
         LCD_body.appendChild(text_language1Element);
         LCD_body.appendChild(text_language2Element);
 
-        const text_1px_x = ((width_size / 2) - (text_language1Element.clientWidth / 2))
-        const text_2px_x = ((width_size / 2) - (text_language2Element.clientWidth / 2))
+        const text_1px_x = ((width_size / 2) - (text_language1Element.clientWidth / 2)) * percent_width_size
+        const text_2px_x = ((width_size / 2) - (text_language2Element.clientWidth / 2)) * percent_width_size
 
         //text_language1Element.style.left =  text_1px_x + "px";
         //text_language2Element.style.left =  text_2px_x + "px";
@@ -140,8 +144,8 @@ class AnimationCenterText extends AnimationRoot {
         console.log(text_1px_x)
         console.log(text_2px_x)
 
-        const text_1px_y = ((hight_size / 2) - (text_language1Element.clientHeight / 2)) -70
-        const text_2px_y = ((hight_size / 2) - (text_language2Element.clientHeight / 2))
+        const text_1px_y = (((hight_size / 2) - (text_language1Element.clientHeight / 2)) -70) * percent_hight_size
+        const text_2px_y = (((hight_size / 2) - (text_language2Element.clientHeight / 2))) * percent_hight_size
 
         //text_language1Element.style.top =  text_1px_y + "px";
         //text_language2Element.style.top =  text_2px_y + "px";
@@ -152,24 +156,27 @@ class AnimationCenterText extends AnimationRoot {
         //text_language1Element.className = "text_language1Element_sta";
         //text_language1Element.className = "text_language1Element_end";
         //text_language1Element.classList.add("text_language1Element_sta")
-        text_language1Element.style.setProperty('--left_pos_A', text_1px_x-200+`px`);
-        text_language1Element.style.setProperty('--left_pos_B', text_1px_x+`px`);
+        text_language1Element.style.setProperty('--left_pos_A', text_1px_x-20+`%`);
+        text_language1Element.style.setProperty('--left_pos_B', text_1px_x+`%`);
         
-        text_language1Element.style.setProperty('--top_pos_A', text_1px_y+`px`);
-        text_language1Element.style.setProperty('--top_pos_B', text_1px_y-(hight_size*0.3)+`px`);
+        text_language1Element.style.setProperty('--top_pos_A', text_1px_y+`%`);
+        text_language1Element.style.setProperty('--top_pos_B', text_1px_y-(hight_size*0.35*percent_hight_size)+`%`);
 
         //text_language1Element.style.setProperty('--time', "2s");
-        text_language1Element.classList.add("text_languageElement_sta")
+        text_language1Element.classList.add("text_languageElement_sta_up")
+        //text_language1Element.classList.add("text_languageElement_up")
+
 
         //(´・ω・`)
 
-        text_language2Element.style.setProperty('--left_pos_A', text_2px_x-100+`px`);
-        text_language2Element.style.setProperty('--left_pos_B', text_2px_x+`px`);
+        text_language2Element.style.setProperty('--left_pos_A', text_2px_x-10+`%`);
+        text_language2Element.style.setProperty('--left_pos_B', text_2px_x+`%`);
         
-        text_language2Element.style.setProperty('--top_pos_A', text_2px_y+`px`);
-        text_language2Element.style.setProperty('--top_pos_B', text_2px_y-(hight_size*0.3)+`px`);
+        text_language2Element.style.setProperty('--top_pos_A', text_2px_y+`%`);
+        text_language2Element.style.setProperty('--top_pos_B', text_2px_y-(hight_size*0.35*percent_hight_size)+`%`);
         //text_language2Element.style.setProperty('--time', "3s");
-        text_language2Element.classList.add("text_languageElement_sta")
+        text_language2Element.classList.add("text_languageElement_sta_up")
+        //text_language2Element.classList.add("text_languageElement_up")
 
         
 
